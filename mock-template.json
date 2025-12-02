@@ -1,0 +1,27 @@
+{
+  "description": "Retorna uma lista paginada de usuários",
+  "enabled": true,
+  "request": {
+    "method": "GET",
+    "path": "/api/v1/users",
+    "queryParams": {
+      "page": "1"
+    }
+  },
+  "response": {
+    "statusCode": 200,
+    "delaySeconds": 0.5,
+    "headers": {
+      "Content-Type": "application/json; charset=utf-8"
+    },
+    "body": {
+      "users": [
+        {
+          "id": 1,
+          "name": "John Doe",
+          "email": "john.doe@example.com"
+        }
+      ]
+    }
+  }
+}
