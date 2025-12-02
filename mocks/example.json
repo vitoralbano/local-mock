@@ -1,0 +1,12 @@
+
+{
+  "status_code": 200,
+  "response": {
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "message": "This is a mock response from example.json"
+    }
+  }
+}
