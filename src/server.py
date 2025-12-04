@@ -2,12 +2,14 @@
 import http.server
 import json
 import os
+import threading
 import time
 from http import HTTPStatus
 from urllib.parse import urlparse, parse_qs
 
 from . import messages
 from . import config
+
 
 class MockRequestHandler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
@@ -93,22 +95,33 @@ class MockRequestHandler(http.server.BaseHTTPRequestHandler):
 
     def _print_request_log(self, status, delay):
         """Prints a custom log message for the request."""
-        print(messages.REQUEST_LOG.format(method=self.command, path=self.path, status=status, delay=delay))
+        print(messages.REQUEST_LOG.format(method=self.command, path=self.path, status=status, delay=f"{delay:.4f}s"))
 
     def log_request(self, code='-', size='-'):
         """Overrides the base class method to prevent automatic logging."""
         pass
 
-def run(server_class=http.server.HTTPServer, handler_class=MockRequestHandler):
-    server_address = (config.HOST, config.PORT)
+def run(stop_event, server_class=http.server.HTTPServer, handler_class=MockRequestHandler):
+    """
+    Sets up and runs the mock server until the stop_event is set.
+    """
+    server_address = ('', config.PORT)
     httpd = server_class(server_address, handler_class)
-    
+
+    # Run server in a separate thread so we can shut it down gracefully
+    server_thread = threading.Thread(target=httpd.serve_forever)
+    server_thread.daemon = True
+    server_thread.start()
+
     print(messages.SERVER_START.format(port=config.PORT))
+
     try:
-        httpd.serve_forever()
+        # Wait for the stop event or a keyboard interrupt
+        stop_event.wait()
     except KeyboardInterrupt:
         print(messages.SERVER_STOP)
+    finally:
+        # Gracefully shut down the server
+        httpd.shutdown()
         httpd.server_close()
-
-if __name__ == '__main__':
-    run()
+        server_thread.join()
