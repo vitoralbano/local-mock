@@ -1,8 +1,9 @@
 # src/messages.py
 
 # Server messages
-SERVER_START = "Starting mock server on http://localhost:{port}..."
+SERVER_START = "Starting mock server on http://0.0.0.0:{port}..."
 SERVER_STOP = "\nStopping server..."
+SERVER_RELOADING = "Reloading server due to {reason}..."
 
 # Request log format
 REQUEST_LOG = "{method} {path} - {status} in {delay:.4f}s"

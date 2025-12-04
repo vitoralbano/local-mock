@@ -4,7 +4,6 @@ import os
 
 # Default configuration values
 DEFAULT_CONFIG = {
-    'host': 'localhost',
     'port': 8000,
     'mock_dir': 'mocks'
 }
@@ -28,9 +27,8 @@ def load_config(config_path='config.json'):
 
 def reload_config(config_path='config.json'):
     """Reloads the configuration from a specific file and updates global vars."""
-    global config, HOST, PORT, MOCK_DIR
+    global config, PORT, MOCK_DIR
     config = load_config(config_path)
-    HOST = config.get('host')
     PORT = config.get('port')
     MOCK_DIR = config.get('mock_dir')
 
