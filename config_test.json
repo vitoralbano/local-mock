@@ -1,6 +1,0 @@
-
-{
-  "host": "localhost",
-  "port": 8081,
-  "mock_dir": "tests/mocks"
-}
